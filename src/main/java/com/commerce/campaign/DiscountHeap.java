@@ -1,4 +1,6 @@
-package com.commerce;
+package com.commerce.campaign;
+
+import com.commerce.category.WeightedCategory;
 
 import java.util.PriorityQueue;
 
@@ -8,8 +10,6 @@ public class DiscountHeap {
 
     public void addWeightedCategory(WeightedCategory weightedCategory) {
         this.heap.add(weightedCategory);
-//        private Map<Category, WeightedCategory> categoryMap;
-//        this.categoryMap.add(weightedCategory.getCategory(), weightedCategory);
     }
 
     public WeightedCategory getMaxDiscount() {
@@ -22,8 +22,5 @@ public class DiscountHeap {
 
     public void mergeDiscountHeap(DiscountHeap other) {
         heap.addAll(other.heap);
-//        for(WeightedCategory weightedCategory : other.heap){
-//
-//        }
     }
 }

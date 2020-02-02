@@ -1,6 +1,9 @@
-package com.commerce;
+package com.commerce.delivery;
 
-import java.awt.*;
+import com.commerce.cart.ShoppingCart;
+import com.commerce.shared.DistinctCategoriesWithoutHierarchy;
+import com.commerce.shared.DistinctCategory;
+
 import java.util.*;
 import java.util.List;
 
@@ -64,68 +67,3 @@ public class DeliveryCostCalculator {
     }
 }
 
-interface DeliveryCost{
-    double calculateAmount(ShoppingCart cart, DeliveryCostCalculator calculator);
-}
-
-class PerDeliveryCost implements DeliveryCost{
-
-    @Override
-    public double calculateAmount(ShoppingCart cart, DeliveryCostCalculator calculator) {
-        double deliveryCost = getNumberOfDeliveries(cart.getItems(), calculator) * calculator.getCostPerDelivery();
-        return deliveryCost;
-    }
-
-    private int getNumberOfDeliveries(List<LineItem> items, DeliveryCostCalculator calculator){
-        Set<Category> allSingleLevelCategories = new HashSet<>();
-        for (LineItem item : items){
-            allSingleLevelCategories.add(item.getProduct().getCategory());
-        }
-        DistinctCategory distinctCategoryStrategy = calculator.getDistinctCategoryStrategy();
-        List<Category> distinctCategories = distinctCategoryStrategy.getDistinctCategories(allSingleLevelCategories);
-        return distinctCategories.size();
-    }
-}
-
-class PerProductCost implements DeliveryCost{
-
-    @Override
-    public double calculateAmount(ShoppingCart cart, DeliveryCostCalculator calculator) {
-        return cart.getItems().size() * calculator.getCostPerProduct();
-    }
-}
-
-class FixedCost implements DeliveryCost{
-
-    @Override
-    public double calculateAmount(ShoppingCart cart, DeliveryCostCalculator calculator) {
-        return calculator.getFixedCost();
-    }
-}
-
-interface DistinctCategory{
-    List<Category> getDistinctCategories(Collection<Category> singleLevelCategories);
-}
-
-class DistinctCategoriesWithoutHierarchy implements DistinctCategory{
-
-    @Override
-    public List<Category> getDistinctCategories(Collection<Category> singleLevelCategories) {
-        return new ArrayList<>(singleLevelCategories);
-    }
-}
-
-class DistinctCategoriesWithHierarchy implements DistinctCategory{
-
-    @Override
-    public List<Category> getDistinctCategories(Collection<Category> singleLevelCategories) {
-        Set<Category> result = new HashSet<>();
-        for(Category category: singleLevelCategories){
-            while (category.parentCategory != null){
-                category = category.parentCategory;
-            }
-            result.add(category);
-        }
-        return new ArrayList<>(result);
-    }
-}

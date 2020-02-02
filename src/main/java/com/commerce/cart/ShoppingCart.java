@@ -1,4 +1,13 @@
-package com.commerce;
+package com.commerce.cart;
+
+import com.commerce.campaign.Campaign;
+import com.commerce.campaign.CampaingDiscountManager;
+import com.commerce.category.WeightedCategory;
+import com.commerce.coupon.Coupon;
+import com.commerce.coupon.CouponDiscountCalculator;
+import com.commerce.coupon.CouponDiscountCalculatorByAmount;
+import com.commerce.coupon.CouponDiscountCalculatorByRate;
+import com.commerce.shared.DiscountType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +26,7 @@ public class ShoppingCart {
         this.couponDiscountCalculators.put(DiscountType.Rate, new CouponDiscountCalculatorByRate());
     }
 
-    public void addItem(Product product, int quantity) {
+    public void addItem(Product product, int quantity) throws Exception {
         LineItem lineItem = new LineItem(product, quantity);
 
         this.items.add(lineItem);
@@ -81,45 +90,3 @@ public class ShoppingCart {
     }
 }
 
-interface CampaignDiscountCalculator{
-    double calculateDiscount(Campaign campaign, double totalAmount);
-}
-
-class CampaignDiscountCalculatorByAmount implements CampaignDiscountCalculator{
-
-    @Override
-    public double calculateDiscount(Campaign campaign, double totalAmount) {
-        return campaign.getDiscountFactor();
-    }
-}
-
-class CampaignDiscountCalculatorByRate implements CampaignDiscountCalculator{
-
-    @Override
-    public double calculateDiscount(Campaign campaign, double totalAmount) {
-        double campaignDiscount = campaign.getDiscountFactor() / 100 * totalAmount;
-        return campaignDiscount;
-    }
-}
-
-interface CouponDiscountCalculator{
-    double calculateDiscount(ShoppingCart cart, Coupon coupon);
-}
-
-class CouponDiscountCalculatorByRate implements CouponDiscountCalculator{
-
-    @Override
-    public double calculateDiscount(ShoppingCart cart, Coupon coupon) {
-        double totalWithCampaingDiscount = cart.getTotalAmount() - cart.getCampaignDiscount();
-        double couponDiscount = coupon.getDiscountFactor() / 100 * totalWithCampaingDiscount;
-        return couponDiscount;
-    }
-}
-
-class CouponDiscountCalculatorByAmount implements CouponDiscountCalculator{
-
-    @Override
-    public double calculateDiscount(ShoppingCart cart, Coupon coupon) {
-        return coupon.getDiscountFactor();
-    }
-}

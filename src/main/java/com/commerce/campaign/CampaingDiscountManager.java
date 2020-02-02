@@ -1,6 +1,8 @@
-package com.commerce;
+package com.commerce.campaign;
 
-import sun.awt.HKSCS;
+import com.commerce.cart.LineItem;
+import com.commerce.category.Category;
+import com.commerce.category.WeightedCategory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,79 +29,69 @@ public class CampaingDiscountManager {
     }
 
     public void addItem(LineItem item) {
-        DiscountHeap discountHeap = null;
-        WeightedCategory weightedCategory = null;
+        WeightedCategoryDiscountHeap weightedCategoryDiscountHeap = null;
         if(!weightedCategoryMap.containsKey(item.getProduct().getCategory())){
-            WeightedCategoryDiscountHeap weightedCategoryDiscountHeap = new WeightedCategoryDiscountHeap();
-            discountHeap = new DiscountHeap();
-            weightedCategoryDiscountHeap.discountHeap = discountHeap;
-
-            weightedCategory = new WeightedCategory(item.getProduct().getCategory());
-            List<Campaign> campaigns = campaignMap.get(item.getProduct().getCategory());
-            if(campaigns != null){
-                for (Campaign campaign : campaigns){
-                    weightedCategory.addCampaign(campaign);
-                }
-            }
-
-            discountHeap.addWeightedCategory(weightedCategory);
-            //weightedCategory.addLineItem(item);
-            weightedCategoryDiscountHeap.weightedCategory = weightedCategory;
-
-            weightedCategoryMap.put(item.getProduct().getCategory(), weightedCategoryDiscountHeap);
+            weightedCategoryDiscountHeap = createWeightedCategoryDiscountHeap(item.getProduct().getCategory(), new DiscountHeap());
         }else{
-            WeightedCategoryDiscountHeap weightedCategoryDiscountHeap = weightedCategoryMap.get(item.getProduct().getCategory());
-            discountHeap = weightedCategoryDiscountHeap.discountHeap;
-            weightedCategory = weightedCategoryDiscountHeap.weightedCategory;
+            weightedCategoryDiscountHeap = weightedCategoryMap.get(item.getProduct().getCategory());
         }
 
-        weightedCategory.addLineItem(item);
-        discountHeap.removeWeightedCategory(weightedCategory);
-        discountHeap.addWeightedCategory(weightedCategory);
+        DiscountHeap discountHeap = weightedCategoryDiscountHeap.discountHeap;
+        WeightedCategory weightedCategory = weightedCategoryDiscountHeap.weightedCategory;
+        addLineItemToWeightedCategory(discountHeap, weightedCategory, item);
 
-        while (weightedCategory.getCategory().parentCategory != null){
+        while (weightedCategory.getCategory().getParentCategory() != null){
             WeightedCategory parentWeightedCategory = weightedCategory.getParentWeightedCategory();
             if(parentWeightedCategory == null){
 
-                Category parentCategory = weightedCategory.getCategory().parentCategory;
-                WeightedCategoryDiscountHeap h = weightedCategoryMap.get(parentCategory);
-                if(h==null){
-                    parentWeightedCategory = new WeightedCategory(parentCategory);
-
-                    List<Campaign> campaigns = campaignMap.get(parentCategory);
-                    if(campaigns!=null){
-                        for (Campaign campaign : campaigns){
-                            parentWeightedCategory.addCampaign(campaign);
-                        }
-                    }
-
+                Category parentCategory = weightedCategory.getCategory().getParentCategory();
+                weightedCategoryDiscountHeap = weightedCategoryMap.get(parentCategory);
+                if(weightedCategoryDiscountHeap==null){
+                    weightedCategoryDiscountHeap = createWeightedCategoryDiscountHeap(parentCategory, discountHeap);
+                    parentWeightedCategory = weightedCategoryDiscountHeap.weightedCategory;
                     weightedCategory.setParentWeightedCategory(parentWeightedCategory);
-                    discountHeap.addWeightedCategory(parentWeightedCategory);
-
-                    h=new WeightedCategoryDiscountHeap();
-                    h.discountHeap = discountHeap;
-                    h.weightedCategory = parentWeightedCategory;
-                    weightedCategoryMap.put(parentCategory, h);
                 }
                 else{
-                    h.discountHeap.mergeDiscountHeap(discountHeap);
-                    discountHeap = h.discountHeap;
-                    parentWeightedCategory = h.weightedCategory;
+                    weightedCategoryDiscountHeap.discountHeap.mergeDiscountHeap(discountHeap);
+                    discountHeap = weightedCategoryDiscountHeap.discountHeap;
+                    parentWeightedCategory = weightedCategoryDiscountHeap.weightedCategory;
                 }
-
             }
-
             weightedCategory = parentWeightedCategory;
-
-            weightedCategory.addLineItem(item);
-            discountHeap.removeWeightedCategory(weightedCategory);
-            discountHeap.addWeightedCategory(weightedCategory);
+            addLineItemToWeightedCategory(discountHeap, weightedCategory, item);
         }
 
         if(!discountHeapList.contains(discountHeap)){
             discountHeapList.add(discountHeap);
         }
     }
+
+    private void addLineItemToWeightedCategory(DiscountHeap discountHeap, WeightedCategory weightedCategory, LineItem item){
+        weightedCategory.addLineItem(item);
+        discountHeap.removeWeightedCategory(weightedCategory);
+        discountHeap.addWeightedCategory(weightedCategory);
+    }
+
+    private WeightedCategoryDiscountHeap createWeightedCategoryDiscountHeap(Category category, DiscountHeap discountHeap){
+        WeightedCategoryDiscountHeap weightedCategoryDiscountHeap = new WeightedCategoryDiscountHeap();
+        weightedCategoryDiscountHeap.discountHeap = discountHeap;
+
+        WeightedCategory weightedCategory = new WeightedCategory(category);
+        List<Campaign> campaigns = campaignMap.get(category);
+        if(campaigns != null){
+            for (Campaign campaign : campaigns){
+                weightedCategory.addCampaign(campaign);
+            }
+        }
+
+        discountHeap.addWeightedCategory(weightedCategory);
+        weightedCategoryDiscountHeap.weightedCategory = weightedCategory;
+
+        weightedCategoryMap.put(category, weightedCategoryDiscountHeap);
+        return weightedCategoryDiscountHeap;
+    }
+
+
 
     public List<WeightedCategory> getMaxDiscount() {
         List<WeightedCategory> result = new ArrayList<>();

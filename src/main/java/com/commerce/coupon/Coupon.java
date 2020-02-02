@@ -1,11 +1,13 @@
-package com.commerce;
+package com.commerce.coupon;
 
-class Coupon{
+import com.commerce.shared.DiscountType;
+
+public class Coupon{
     private double minPurchaseAmount;
     private double discountFactor;
     private DiscountType discountType;
 
-    Coupon(Double minPurchaseAmount, Double discountFactor, DiscountType discountType){
+    public Coupon(Double minPurchaseAmount, Double discountFactor, DiscountType discountType){
         this.minPurchaseAmount = minPurchaseAmount;
         this.discountFactor = discountFactor;
         this.discountType = discountType;

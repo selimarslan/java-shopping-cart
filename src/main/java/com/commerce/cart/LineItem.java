@@ -1,15 +1,17 @@
-package com.commerce;
+package com.commerce.cart;
+
+import com.commerce.campaign.Campaign;
 
 import javax.print.attribute.Attribute;
 
-class LineItem{
+public class LineItem{
     private Product product;
     private int quantity;
     private Campaign campaign;
     private double campaignDiscountAmount;
     private double couponDiscountAmount;
 
-    LineItem(Product product, int quantity){
+    public LineItem(Product product, int quantity){
         this.product = product;
         this.quantity = quantity;
     }
@@ -56,4 +58,5 @@ class LineItem{
     public double getCouponDiscount() {
         return couponDiscountAmount;
     }
+
 }

@@ -1,4 +1,7 @@
 package com.commerce.delivery;
 
-public class DeliveryCost {
+import com.commerce.cart.ShoppingCart;
+
+interface DeliveryCost{
+    double calculateAmount(ShoppingCart cart, DeliveryCostCalculator calculator);
 }

@@ -1,4 +1,5 @@
-package com.commerce.cart;
+package com.commerce.campaign;
 
-public class CampaignDiscountCalculator {
+public interface CampaignDiscountCalculator{
+    double calculateDiscount(Campaign campaign, double totalAmount);
 }

@@ -1,4 +1,7 @@
-package com.commerce.cart;
+package com.commerce.coupon;
 
-public class CouponDiscountCalculator {
+import com.commerce.cart.ShoppingCart;
+
+public interface CouponDiscountCalculator{
+    double calculateDiscount(ShoppingCart cart, Coupon coupon);
 }

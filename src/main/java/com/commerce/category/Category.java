@@ -1,14 +1,14 @@
-package com.commerce;
+package com.commerce.category;
 
-class Category{
-    Category parentCategory;
+public class Category{
+    private Category parentCategory;
     String title;
 
-    Category(String title) {
+    public Category(String title) {
         this(title, null);
     }
 
-    Category(String title, Category parentCategory){
+    public Category(String title, Category parentCategory){
         this.title = title;
         this.parentCategory = parentCategory;
     }

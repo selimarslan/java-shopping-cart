@@ -1,4 +1,10 @@
-package com.commerce.delivery;
+package com.commerce.shared;
 
-public class DistinctCategory {
+import com.commerce.category.Category;
+
+import java.util.Collection;
+import java.util.List;
+
+public interface DistinctCategory{
+    List<Category> getDistinctCategories(Collection<Category> singleLevelCategories);
 }

@@ -1,16 +1,18 @@
-package com.commerce;
+package com.commerce.campaign;
 
-class Campaign{
+import com.commerce.category.Category;
+import com.commerce.shared.DiscountType;
+
+public class Campaign{
     private Category category;
     private Double discountFactor;
     private int quantityLowerLimit;
     private DiscountType discountType;
 
-    Campaign(Category category, Double discountFactor, int quantityLowerLimit, DiscountType discountType){
+    public Campaign(Category category, Double discountFactor, int quantityLowerLimit, DiscountType discountType){
         this.category = category;
         this.discountFactor = discountFactor;
         this.quantityLowerLimit = quantityLowerLimit;
-        this.discountFactor = discountFactor;
         this.discountType = discountType;
     }
 

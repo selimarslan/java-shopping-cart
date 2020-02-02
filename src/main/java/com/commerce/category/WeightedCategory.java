@@ -1,4 +1,11 @@
-package com.commerce;
+package com.commerce.category;
+
+import com.commerce.campaign.Campaign;
+import com.commerce.campaign.CampaignDiscountCalculator;
+import com.commerce.campaign.CampaignDiscountCalculatorByAmount;
+import com.commerce.campaign.CampaignDiscountCalculatorByRate;
+import com.commerce.cart.LineItem;
+import com.commerce.shared.DiscountType;
 
 import java.util.*;
 
@@ -13,7 +20,7 @@ public class WeightedCategory implements Comparable<WeightedCategory>{
     private double sumOfSubTotal = 0;
     private Map<DiscountType, CampaignDiscountCalculator> discountCalculators;
 
-    WeightedCategory(Category category){
+    public WeightedCategory(Category category){
         this.category = category;
         campaigns = new ArrayList<>();
         items = new ArrayList<>();

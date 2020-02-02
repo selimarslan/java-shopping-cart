@@ -1,11 +1,15 @@
-package com.commerce;
+package com.commerce.cart;
 
-class Product{
+import com.commerce.category.Category;
+
+import java.util.Objects;
+
+public class Product{
     private String title;
     private Double price;
     private Category category;
 
-    Product(String title, Double price, Category category){
+    public Product(String title, Double price, Category category){
         this.title = title;
         this.price = price;
         this.category = category;
