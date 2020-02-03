@@ -16,4 +16,8 @@ public class Category{
     public Category getParentCategory() {
         return parentCategory;
     }
+
+    public String getTitle() {
+        return title;
+    }
 }

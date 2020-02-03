@@ -37,6 +37,11 @@ public class LineItem{
         return lineTotal;
     }
 
+    public double getTotalDiscount(){
+        double lineTotalDiscount = campaignDiscountAmount + couponDiscountAmount;
+        return lineTotalDiscount;
+    }
+
     public double getSubTotal() {
         double lineTotal = product.getPrice() * quantity;
         double subTotal = lineTotal - campaignDiscountAmount - couponDiscountAmount;

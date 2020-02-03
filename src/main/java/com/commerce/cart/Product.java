@@ -22,5 +22,9 @@ public class Product{
     public Category getCategory() {
         return category;
     }
+
+    public String getTitle() {
+        return title;
+    }
 }
 

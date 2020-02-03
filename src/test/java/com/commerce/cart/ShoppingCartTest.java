@@ -110,6 +110,7 @@ public class ShoppingCartTest {
 
 
         Assert.assertEquals(375, campaignDiscount, 0.1);
+
     }
 
     @Test
@@ -130,6 +131,7 @@ public class ShoppingCartTest {
 
 
         Assert.assertEquals(700, campaignDiscount, 0.1);
+
     }
 
     @Test
@@ -167,6 +169,14 @@ public class ShoppingCartTest {
 
         Assert.assertEquals(0, couponDiscount, 0.001);
 
+    }
+
+    @Test
+    public void shouldPrintWithoutError() throws Exception {
+        testCouponDiscount();
+
+
+        cart.print();
     }
 
 }
