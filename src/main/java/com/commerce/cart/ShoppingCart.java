@@ -67,9 +67,9 @@ public class ShoppingCart {
         CouponDiscountCalculator couponDiscountCalculator = couponDiscountCalculators.get(coupon.getDiscountType());
         couponDiscount = couponDiscountCalculator.calculateDiscount(this,coupon);
 
-        double unitDiscount = couponDiscount / totalQuanity;
+        double unitDiscount = couponDiscount / totalAmount;
         for (LineItem item: items){
-            item.setCouponDiscount(unitDiscount * item.getQuantity());
+            item.setCouponDiscount(unitDiscount * item.getTotal());
         }
     }
 
