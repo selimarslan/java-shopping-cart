@@ -11,7 +11,7 @@ Shopping Cart
           Fruit |           Mango |       15 |     150.00 |     2250.00 |         598.21
       Vegetable |           Onion |       10 |      40.00 |      400.00 |          33.02
 
-                                                                Total Amount:    2107.01
+                                                                Total Amount:    2340.00
                                                                Delivery Cost:     232.99
 
 

@@ -172,6 +172,28 @@ public class ShoppingCartTest {
     }
 
     @Test
+    public void testGetTotalAmountAfterDiscountsApplied() throws Exception {
+        Product apple = new Product("Apple", 100.0, fruitCategory);
+        Product mango = new Product("Mango", 150.0, fruitCategory);
+        Product onion = new Product("Onion", 40.0, vegetableCategory);
+
+        Campaign fruitCampaign = new Campaign(fruitCategory, 20d, 15, DiscountType.Rate);
+        Coupon coupon = new Coupon(2000.0, 10.0, DiscountType.Rate);
+
+        cart.addItem(apple, 5);
+        cart.addItem(mango, 15);
+        cart.addItem(onion, 10);
+
+
+        cart.applyDiscounts(fruitCampaign); // 3150 - 2600
+        cart.applyCoupon(coupon);// 260
+        double totalAmountAfterDiscount = cart.getTotalAmountAfterDiscount();
+
+
+        Assert.assertEquals(2340, totalAmountAfterDiscount, 0.001);
+    }
+
+    @Test
     public void shouldPrintWithoutError() throws Exception {
         testCouponDiscount();
 

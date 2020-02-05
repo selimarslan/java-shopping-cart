@@ -100,7 +100,6 @@ public class ShoppingCart {
         double totalAmountAfterDiscount = totalAmount;
         totalAmountAfterDiscount -= getCampaignDiscount();
         totalAmountAfterDiscount -= getCouponDiscount();
-        totalAmountAfterDiscount -= getDeliveryCost();
         return totalAmountAfterDiscount;
     }
 
